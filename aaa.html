@@ -21,6 +21,24 @@
       //マーカーにポップアップを紐付けする。同時にbindTooltipでツールチップも追加
       L.marker(mpoint, { draggable: true }).bindPopup(popup1).bindTooltip("埼玉大学").addTo(map);
       L.marker([35.8561, 139.6098]).bindPopup(popup2).bindTooltip("桜区役所").addTo(map);
+
+
+
+      // CSVファイルから緯度経度を読み取り、地図上にプロット
+      fetch('place.csv')
+      .then(response => response.text())
+      .then(data => {
+        var lines = data.split('\n');
+        for (var i = 1; i < lines.length; i++) { // 1行目はヘッダー
+          var parts = lines[i].split(',');
+          var lat = parseFloat(parts[0]);
+          var lng = parseFloat(parts[1]);
+          L.marker([lat, lng]).addTo(map);
+        }
+      })
+      .catch(error => console.error('Error:', error));
+
+
     }
   </script>
 </head>
