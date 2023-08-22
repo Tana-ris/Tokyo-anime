@@ -14,7 +14,9 @@
 
 <script>
   // Leafletの地図オブジェクトを作成
-  var map = L.map('map').setView([0, 0], 2); // [緯度, 経度], ズームレベル
+  var map = L.map('mapcontainer', { zoomControl: false });
+  var mpoint = [35.8627, 139.6072];
+  map.setView(mpoint, 15); // [緯度, 経度], ズームレベル
 
   // 地図タイルを追加
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
