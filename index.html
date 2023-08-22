@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>地図表示</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+  <!-- Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+
+<div id="map" style="width: 800px; height: 600px;"></div>
+
+<script>
+  // Leafletの地図オブジェクトを作成
+  var map = L.map('map').setView([0, 0], 2); // [緯度, 経度], ズームレベル
+
+  // 地図タイルを追加
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // CSVファイルから緯度経度を読み取り、地図上にプロット
+  fetch('place.csv')
+    .then(response => response.text())
+    .then(data => {
+      var lines = data.split('\n');
+      for (var i = 1; i < lines.length; i++) { // 1行目はヘッダー
+        var parts = lines[i].split(',');
+        var lat = parseFloat(parts[0]);
+        var lng = parseFloat(parts[1]);
+        L.marker([lat, lng]).addTo(map);
+      }
+    })
+    .catch(error => console.error('Error:', error));
+</script>
+
+</body>
+</html>
