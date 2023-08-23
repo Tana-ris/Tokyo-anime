@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>地図表示</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.0/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
+  
 <script>
   function init() {
     var map = L.map('mapcontainer', { zoomControl: false });
@@ -29,8 +37,14 @@
     var popup1 = L.popup({ maxWidth: 550 }).setContent(sucontents);
     L.marker(mpoint, { draggable: true }).bindPopup(popup1).addTo(map);
 
-    var sakuraPoint = [35.8561, 139.6098];
-    var popup2 = L.popup().setContent("桜区役所です");
-    L.marker(sakuraPoint).bindPopup(popup2).addTo(map);
+    // var sakuraPoint = [35.8561, 139.6098];
+    // var popup2 = L.popup().setContent("桜区役所です");
+    // L.marker(sakuraPoint).bindPopup(popup2).addTo(map);
   }
 </script>
+</head>
+<body onload="init()">
+  <div id="mapcontainer" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
+</body>
+
+</html>
