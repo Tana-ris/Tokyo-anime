@@ -25,7 +25,7 @@
       }).addTo(map);
 
       // CSVファイルから緯度経度とポップアップ文字を読み取り、地図上にマーカーをプロット
-      fetch('./place_2.csv', {
+      fetch('./place.csv', {
         headers: {
           'Content-Type': 'text/csv; charset=utf-8'
         }
@@ -38,7 +38,18 @@
             var lat = parseFloat(parts[0]);
             var lng = parseFloat(parts[1]);
             var popupText = parts[2]; // 3列目のポップアップ文字
-            L.marker([lat, lng]).bindPopup(popupText).addTo(map);
+
+            // ポップアップオブジェクトを作成
+            var popup = L.popup({ maxWidth: 550 }).setContent(popupText);
+
+            // マーカーにポップアップと画像を紐付け
+            var marker = L.marker([lat, lng]).bindPopup(popup).addTo(map);
+
+            // 画像を追加
+            var imageNumber = i; // ファイル名に使う連番（1から始まると仮定）
+            var imageUrl = `./img/(${imageNumber}).jpg`;
+            var imageHtml = `<img src="${imageUrl}" width="200" height="150">`;
+            marker.getPopup().setContent(popupText + "<br>" + imageHtml);
           }
         })
         .catch(error => console.error('Error:', error));
