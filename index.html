@@ -61,6 +61,7 @@
 
           if (waypoints.length >= 3) {
             // ルーティングの設定
+            console.log("ここまではうまくいった");
             var routingControl = L.Routing.control({
               waypoints: waypoints.slice(1, 4), // 2行目から4行目までを指定
               routeWhileDragging: true
