@@ -47,7 +47,7 @@
             var popup = L.popup({ maxWidth: 550 }).setContent(popupContent);
 
             // マーカーにポップアップとツールチップを紐付け
-            var marker = L.marker([lat, lng], { draggable: false }) // ドラッグを無効化
+            var marker = L.marker([lat, lng])
               .bindPopup(popup)
               .bindTooltip(popupText)
               .addTo(map);
