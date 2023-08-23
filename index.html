@@ -4,9 +4,7 @@
   <title>地図表示</title>
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
   <meta charset="UTF-8">
 </head>
 <body>
@@ -35,14 +33,11 @@
         .then(response => response.text())
         .then(data => {
           var lines = data.split('\n');
-          var waypoints = [];
 
           for (var i = 1; i < lines.length; i++) { // 1行目はヘッダー
             var parts = lines[i].split(',');
             var lat = parseFloat(parts[0]);
             var lng = parseFloat(parts[1]);
-
-            console.log('Waypoint ' + (i + 1) + ' - Lat: ' + lat + ', Lng: ' + lng);
 
             // ポップアップオブジェクトを作成
             var popupContent = parts[2];
@@ -57,23 +52,11 @@
               .bindTooltip(parts[2])
               .addTo(map);
 
-            waypoints.push(L.latLng(lat, lng));
-            
             // 画像を追加
             var imageNumber = i; // ファイル名に使う連番（1から始まると仮定）
             var imageUrl = `./img/${imageNumber}.jpg`;
             var imageHtml = `<img src="${imageUrl}" width="200" height="150">`;
             marker.getPopup().setContent(popupContent + "<br>" + imageHtml);
-          }
-
-          console.log('Waypoints:', waypoints);
-
-          if (waypoints.length >= 2) {
-            // ルーティングの設定
-            L.Routing.control({
-              waypoints: waypoints,
-              routeWhileDragging: true
-            }).addTo(map);
           }
         })
         .catch(error => console.error('Error:', error));
