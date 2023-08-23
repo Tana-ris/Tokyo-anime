@@ -1,12 +1,11 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Tokyo</title>
+  <title>地図表示</title>
   <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.0/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
   <meta charset="UTF-8">
 </head>
 <body>
@@ -35,46 +34,30 @@
         .then(response => response.text())
         .then(data => {
           var lines = data.split('\n');
-          var waypoints = [];
-
           for (var i = 1; i < lines.length; i++) { // 1行目はヘッダー
             var parts = lines[i].split(',');
             var lat = parseFloat(parts[0]);
             var lng = parseFloat(parts[1]);
+            var popupText = parts[2]; // 3列目のポップアップ文字
 
-            waypoints.push(L.latLng(lat, lng));
+            // ポップアップオブジェクトを作成
+            var popupContent = `${popupText}`;
+            if (parts.length > 3) popupContent += `<br>${parts[3]}`;
+            if (parts.length > 4) popupContent += `<br>${parts[4]}`;
+            if (parts.length > 5) popupContent += `<br>${parts[5]}`;
+            var popup = L.popup({ maxWidth: 550 }).setContent(popupContent);
+
+            // マーカーにポップアップとツールチップを紐付け
+            var marker = L.marker([lat, lng])
+              .bindPopup(popup)
+              .bindTooltip(popupText)
+              .addTo(map);
 
             // 画像を追加
             var imageNumber = i; // ファイル名に使う連番（1から始まると仮定）
             var imageUrl = `./img/${imageNumber}.jpg`;
             var imageHtml = `<img src="${imageUrl}" width="200" height="150">`;
-
-            if (waypoints.length === 4) {
-              // ルーティングの設定
-              var routingControl = L.Routing.control({
-                waypoints: [
-                  L.latLng(waypoints[1].lat, waypoints[1].lng), // 2行目のポイント
-                  L.latLng(waypoints[2].lat, waypoints[2].lng), // 3行目のポイント
-                  L.latLng(waypoints[3].lat, waypoints[3].lng)  // 4行目のポイント
-                ],
-                routeWhileDragging: true
-              }).addTo(map);
-              
-              routingControl.on('routesfound', function(event) {
-                console.log('Routes found:', event.routes);
-              });
-              
-              // マーカーにポップアップとツールチップを紐付け
-              var popupContent = parts[2];
-              if (parts.length > 3) popupContent += `<br>${parts[3]}`;
-              if (parts.length > 4) popupContent += `<br>${parts[4]}`;
-              if (parts.length > 5) popupContent += `<br>${parts[5]}`;
-              var popup = L.popup({ maxWidth: 550 }).setContent(popupContent + "<br>" + imageHtml);
-              var marker = L.marker([lat, lng])
-                .bindPopup(popup)
-                .bindTooltip(parts[2])
-                .addTo(map);
-            }
+            marker.getPopup().setContent(popupContent + "<br>" + imageHtml);
           }
         })
         .catch(error => console.error('Error:', error));
