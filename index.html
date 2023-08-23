@@ -5,6 +5,7 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
   <meta charset="UTF-8">
 </head>
 <body>
@@ -24,7 +25,6 @@
         attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
       }).addTo(map);
 
-      // CSVファイルから緯度経度とポップアップ文字を読み取り、地図上にマーカーをプロット
       fetch('./place.csv', {
         headers: {
           'Content-Type': 'text/csv; charset=utf-8'
@@ -34,29 +34,37 @@
         .then(data => {
           var lines = data.split('\n');
 
-          for (var i = 1; i < lines.length; i++) { // 1行目はヘッダー
+          var waypoints = [];
+          for (var i = 1; i < lines.length; i++) {
             var parts = lines[i].split(',');
             var lat = parseFloat(parts[0]);
             var lng = parseFloat(parts[1]);
 
-            // ポップアップオブジェクトを作成
             var popupContent = parts[2];
             if (parts.length > 3) popupContent += `<br>${parts[3]}`;
             if (parts.length > 4) popupContent += `<br>${parts[4]}`;
             if (parts.length > 5) popupContent += `<br>${parts[5]}`;
             var popup = L.popup({ maxWidth: 550 }).setContent(popupContent);
 
-            // マーカーにポップアップとツールチップを紐付け
             var marker = L.marker([lat, lng])
               .bindPopup(popup)
               .bindTooltip(parts[2])
               .addTo(map);
 
-            // 画像を追加
-            var imageNumber = i; // ファイル名に使う連番（1から始まると仮定）
+            var imageNumber = i;
             var imageUrl = `./img/${imageNumber}.jpg`;
             var imageHtml = `<img src="${imageUrl}" width="200" height="150">`;
             marker.getPopup().setContent(popupContent + "<br>" + imageHtml);
+
+            waypoints.push(L.latLng(lat, lng));
+          }
+
+          if (waypoints.length >= 3) {
+            // ルーティングの設定
+            var routingControl = L.Routing.control({
+              waypoints: waypoints.slice(1, 4), // 2行目から4行目までを指定
+              routeWhileDragging: true
+            }).addTo(map);
           }
         })
         .catch(error => console.error('Error:', error));
