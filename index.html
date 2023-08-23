@@ -42,27 +42,14 @@
             var lat = parseFloat(parts[0]);
             var lng = parseFloat(parts[1]);
 
-            // ポップアップオブジェクトを作成
-            var popupContent = parts[2];
-            if (parts.length > 3) popupContent += `<br>${parts[3]}`;
-            if (parts.length > 4) popupContent += `<br>${parts[4]}`;
-            if (parts.length > 5) popupContent += `<br>${parts[5]}`;
-            var popup = L.popup({ maxWidth: 550 }).setContent(popupContent);
+            console.log('Waypoint ' + (i + 1) + ' - Lat: ' + lat + ', Lng: ' + lng);
 
-            // マーカーにポップアップとツールチップを紐付け
-            var marker = L.marker([lat, lng])
-              .bindPopup(popup)
-              .bindTooltip(parts[2])
-              .addTo(map);
+            // ... マーカーの生成と表示のコード ...
 
             waypoints.push(L.latLng(lat, lng));
-            
-            // 画像を追加
-            var imageNumber = i; // ファイル名に使う連番（1から始まると仮定）
-            var imageUrl = `./img/${imageNumber}.jpg`;
-            var imageHtml = `<img src="${imageUrl}" width="200" height="150">`;
-            marker.getPopup().setContent(popupContent + "<br>" + imageHtml);
           }
+
+          console.log('Waypoints:', waypoints);
 
           if (waypoints.length >= 2) {
             // ルーティングの設定
