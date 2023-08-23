@@ -5,46 +5,45 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.0/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
-  
-<script>
-  function init() {
-    var map = L.map('mapcontainer', { zoomControl: false });
-
-    var initialLatLng = [35.68927557318069, 139.6997988239306];
-    map.setView(initialLatLng, 15);
-
-    L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
-      attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
-    }).addTo(map);
-
-    // CSVファイルから緯度経度を読み取り、地図上にプロット
-    fetch('./place.csv')
-      .then(response => response.text())
-      .then(data => {
-        var lines = data.split('\n');
-        for (var i = 1; i < lines.length; i++) { // 1行目はヘッダー
-          var parts = lines[i].split(',');
-          var lat = parseFloat(parts[0]);
-          var lng = parseFloat(parts[1]);
-          L.marker([lat, lng]).addTo(map);
-        }
-      })
-      .catch(error => console.error('Error:', error));
-
-    // マーカーの追加
-    var mpoint = [35.8627, 139.6072];
-    var sucontents = "しましゅんです<br><img src='geo.png' width='500' height='375'>";
-    var popup1 = L.popup({ maxWidth: 550 }).setContent(sucontents);
-    L.marker(mpoint, { draggable: true }).bindPopup(popup1).addTo(map);
-
-    // var sakuraPoint = [35.8561, 139.6098];
-    // var popup2 = L.popup().setContent("桜区役所です");
-    // L.marker(sakuraPoint).bindPopup(popup2).addTo(map);
-  }
-</script>
 </head>
 <body onload="init()">
   <div id="mapcontainer" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
-</body>
 
+  <script>
+    function init() {
+      var map = L.map('mapcontainer', { zoomControl: false });
+
+      var initialLatLng = [35.68927557318069, 139.6997988239306];
+      map.setView(initialLatLng, 15);
+
+      L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
+        attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
+      }).addTo(map);
+
+      // CSVファイルから緯度経度を読み取り、地図上にプロット
+      fetch('./place.csv')
+        .then(response => response.text())
+        .then(data => {
+          var lines = data.split('\n');
+          for (var i = 1; i < lines.length; i++) { // 1行目はヘッダー
+            var parts = lines[i].split(',');
+            var lat = parseFloat(parts[0]);
+            var lng = parseFloat(parts[1]);
+            L.marker([lat, lng]).addTo(map);
+          }
+        })
+        .catch(error => console.error('Error:', error));
+
+      // マーカーの追加
+      var mpoint = [35.8627, 139.6072];
+      var sucontents = "しましゅんです<br><img src='geo.png' width='500' height='375'>";
+      var popup1 = L.popup({ maxWidth: 550 }).setContent(sucontents);
+      L.marker(mpoint, { draggable: true }).bindPopup(popup1).addTo(map);
+
+      var sakuraPoint = [35.8561, 139.6098];
+      var popup2 = L.popup().setContent("桜区役所です");
+      L.marker(sakuraPoint).bindPopup(popup2).addTo(map);
+    }
+  </script>
+</body>
 </html>
