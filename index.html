@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>地図表示</title>
+  <title>あああ</title>
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -61,11 +61,15 @@
 
           if (waypoints.length >= 3) {
             // ルーティングの設定
-            console.log("ここまではうまくいった");
             var routingControl = L.Routing.control({
-              waypoints: waypoints.slice(1, 4), // 2行目から4行目までを指定
+              waypoints: waypoints.slice(1, 4),
               routeWhileDragging: true
             }).addTo(map);
+
+            // ルートが地図上に表示されたかどうかをコンソールに出力
+            routingControl.on('routesfound', function(e) {
+              console.log('ルートが地図上に表示されました。');
+            });
           }
         })
         .catch(error => console.error('Error:', error));
