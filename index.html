@@ -59,6 +59,8 @@
             waypoints.push(L.latLng(lat, lng));
           }
 
+          console.log(waypoints.length)
+
           if (waypoints.length >= 3) {
             // ルーティングの設定
             var routingControl = L.Routing.control({
