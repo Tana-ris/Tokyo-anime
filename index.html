@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>iii</title>
+  <title>uuu</title>
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
   <meta charset="UTF-8">
 </head>
 <body>
@@ -25,6 +24,7 @@
         attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
       }).addTo(map);
 
+      // CSVファイルから緯度経度とポップアップ文字を読み取り、地図上にマーカーをプロット
       fetch('./place.csv', {
         headers: {
           'Content-Type': 'text/csv; charset=utf-8'
@@ -33,46 +33,41 @@
         .then(response => response.text())
         .then(data => {
           var lines = data.split('\n');
-
           var waypoints = [];
-          for (var i = 1; i < lines.length; i++) {
+
+          for (var i = 1; i < lines.length; i++) { // 1行目はヘッダー
             var parts = lines[i].split(',');
             var lat = parseFloat(parts[0]);
             var lng = parseFloat(parts[1]);
 
+            // ポップアップオブジェクトを作成
             var popupContent = parts[2];
             if (parts.length > 3) popupContent += `<br>${parts[3]}`;
             if (parts.length > 4) popupContent += `<br>${parts[4]}`;
             if (parts.length > 5) popupContent += `<br>${parts[5]}`;
             var popup = L.popup({ maxWidth: 550 }).setContent(popupContent);
 
+            // マーカーにポップアップとツールチップを紐付け
             var marker = L.marker([lat, lng])
               .bindPopup(popup)
               .bindTooltip(parts[2])
               .addTo(map);
 
-            var imageNumber = i;
+            waypoints.push(L.latLng(lat, lng));
+
+            console.log(`Added waypoint at Lat: ${lat}, Lng: ${lng}`); // 追加した緯度経度をコンソールに出力
+
+            // 画像を追加
+            var imageNumber = i; // ファイル名に使う連番（1から始まると仮定）
             var imageUrl = `./img/${imageNumber}.jpg`;
             var imageHtml = `<img src="${imageUrl}" width="200" height="150">`;
             marker.getPopup().setContent(popupContent + "<br>" + imageHtml);
-
-            waypoints.push(L.latLng(lat, lng));
           }
 
-          console.log(waypoints.length)
+          // waypoints配列をコンソールに出力
+          console.log("Waypoints:", waypoints);
 
-          if (waypoints.length >= 3) {
-            // ルーティングの設定
-            var routingControl = L.Routing.control({
-              waypoints: waypoints.slice(1, 4),
-              routeWhileDragging: true
-            }).addTo(map);
-
-            // ルートが地図上に表示されたかどうかをコンソールに出力
-            routingControl.on('routesfound', function(e) {
-              console.log('ルートが地図上に表示されました。');
-            });
-          }
+          // TODO: ルート表示のコードを追加
         })
         .catch(error => console.error('Error:', error));
     }
