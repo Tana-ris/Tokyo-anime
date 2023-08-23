@@ -35,14 +35,15 @@
         .then(response => response.text())
         .then(data => {
           var lines = data.split('\n');
+          var waypoints = [];
+
           for (var i = 1; i < lines.length; i++) { // 1行目はヘッダー
             var parts = lines[i].split(',');
             var lat = parseFloat(parts[0]);
             var lng = parseFloat(parts[1]);
-            var popupText = parts[2]; // 3列目のポップアップ文字
 
             // ポップアップオブジェクトを作成
-            var popupContent = `${popupText}`;
+            var popupContent = parts[2];
             if (parts.length > 3) popupContent += `<br>${parts[3]}`;
             if (parts.length > 4) popupContent += `<br>${parts[4]}`;
             if (parts.length > 5) popupContent += `<br>${parts[5]}`;
@@ -51,27 +52,27 @@
             // マーカーにポップアップとツールチップを紐付け
             var marker = L.marker([lat, lng])
               .bindPopup(popup)
-              .bindTooltip(popupText)
+              .bindTooltip(parts[2])
               .addTo(map);
 
+            waypoints.push(L.latLng(lat, lng));
+            
             // 画像を追加
             var imageNumber = i; // ファイル名に使う連番（1から始まると仮定）
             var imageUrl = `./img/${imageNumber}.jpg`;
             var imageHtml = `<img src="${imageUrl}" width="200" height="150">`;
             marker.getPopup().setContent(popupContent + "<br>" + imageHtml);
           }
+
+          if (waypoints.length >= 2) {
+            // ルーティングの設定
+            L.Routing.control({
+              waypoints: waypoints,
+              routeWhileDragging: true
+            }).addTo(map);
+          }
         })
         .catch(error => console.error('Error:', error));
-
-      // ルーティングの設定
-      L.Routing.control({
-        waypoints: [
-          L.latLng(35.68927557318069, 139.6997988239306), // 出発地点（例）
-          L.latLng(35.0, 139.0), // 経由地点（例）
-          L.latLng(35.5, 139.5) // 到着地点（例）
-        ],
-        routeWhileDragging: true
-      }).addTo(map);
     }
   </script>
 </body>
