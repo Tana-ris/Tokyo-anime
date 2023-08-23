@@ -24,6 +24,15 @@
         attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
       }).addTo(map);
 
+      // ポリゴン描画のためのGeoJSONファイルを読み込む
+      fetch('./Tokyo.geojson')
+        .then(response => response.json())
+        .then(data => {
+          // GeoJSONデータをポリゴンに変換して地図上に追加
+          var polygon = L.geoJSON(data).addTo(map);
+        })
+        .catch(error => console.error('Error:', error));
+
       // CSVファイルから緯度経度とポップアップ文字を読み取り、地図上にマーカーをプロット
       fetch('./place.csv', {
         headers: {
