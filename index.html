@@ -29,7 +29,8 @@
             var parts = lines[i].split(',');
             var lat = parseFloat(parts[0]);
             var lng = parseFloat(parts[1]);
-            L.marker([lat, lng]).addTo(map);
+            var popupText = parts[2]; // 3列目のポップアップ文字
+            L.marker([lat, lng]).bindPopup(popupText).addTo(map);
           }
         })
         .catch(error => console.error('Error:', error));
