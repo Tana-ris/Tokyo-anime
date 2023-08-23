@@ -28,6 +28,9 @@
     var sucontents = "しましゅんです<br><img src='geo.png' width='500' height='375'>";
     var popup1 = L.popup({ maxWidth: 550 }).setContent(sucontents);
     L.marker(mpoint, { draggable: true }).bindPopup(popup1).addTo(map);
+
+    var sakuraPoint = [35.8561, 139.6098];
+    var popup2 = L.popup().setContent("桜区役所です");
+    L.marker(sakuraPoint).bindPopup(popup2).addTo(map);
   }
 </script>
-
