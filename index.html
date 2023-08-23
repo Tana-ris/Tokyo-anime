@@ -38,12 +38,12 @@
             var lat = parseFloat(parts[0]);
             var lng = parseFloat(parts[1]);
             var popupText = parts[2]; // 3列目のポップアップ文字
-            var col4 = parts[3] || ''; // 4列目の文字列（存在しない場合は空文字列）
-            var col5 = parts[4] || ''; // 5列目の文字列（存在しない場合は空文字列）
-            var col6 = parts[5] || ''; // 6列目の文字列（存在しない場合は空文字列）
 
             // ポップアップオブジェクトを作成
-            var popupContent = `${popupText}<br>${col4}<br>${col5}<br>${col6}`;
+            var popupContent = `${popupText}`;
+            if (parts.length > 3) popupContent += `<br>${parts[3]}`;
+            if (parts.length > 4) popupContent += `<br>${parts[4]}`;
+            if (parts.length > 5) popupContent += `<br>${parts[5]}`;
             var popup = L.popup({ maxWidth: 550 }).setContent(popupContent);
 
             // マーカーにポップアップとツールチップを紐付け
