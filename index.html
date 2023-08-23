@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>uuu</title>
+  <title>eee</title>
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
   <meta charset="UTF-8">
 </head>
 <body>
@@ -56,6 +58,7 @@
             waypoints.push(L.latLng(lat, lng));
 
             console.log(`Added waypoint at Lat: ${lat}, Lng: ${lng}`); // 追加した緯度経度をコンソールに出力
+            console.log(${waypoints.length}); // 追加した緯度経度をコンソールに出力
 
             // 画像を追加
             var imageNumber = i; // ファイル名に使う連番（1から始まると仮定）
@@ -64,13 +67,21 @@
             marker.getPopup().setContent(popupContent + "<br>" + imageHtml);
           }
 
-          // waypoints配列をコンソールに出力
-          console.log("Waypoints:", waypoints);
+          if (waypoints.length >= 3) {
+            // ルーティングの設定
+            L.Routing.control({
+              waypoints: [
+                waypoints[1], // 2行目のポイント
+                waypoints[2]  // 3行目のポイント
+              ],
+              routeWhileDragging: true
+            }).addTo(map);
+          }
 
-          // TODO: ルート表示のコードを追加
         })
         .catch(error => console.error('Error:', error));
     }
   </script>
 </body>
 </html>
+
