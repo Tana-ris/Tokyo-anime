@@ -42,8 +42,11 @@
             // ポップアップオブジェクトを作成
             var popup = L.popup({ maxWidth: 550 }).setContent(popupText);
 
-            // マーカーにポップアップと画像を紐付け
-            var marker = L.marker([lat, lng]).bindPopup(popup).addTo(map);
+            // マーカーにポップアップとツールチップを紐付け
+            var marker = L.marker([lat, lng], { draggable: true })
+              .bindPopup(popup)
+              .bindTooltip(popupText)
+              .addTo(map);
 
             // 画像を追加
             var imageNumber = i; // ファイル名に使う連番（1から始まると仮定）
