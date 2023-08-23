@@ -18,7 +18,7 @@
       var map = L.map('mapcontainer', { zoomControl: false });
 
       var initialLatLng = [35.68927557318069, 139.6997988239306];
-      map.setView(initialLatLng, 13); // ズームレベルを13に変更
+      map.setView(initialLatLng, 13);
 
       L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
         attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>"
@@ -47,7 +47,7 @@
             var popup = L.popup({ maxWidth: 550 }).setContent(popupContent);
 
             // マーカーにポップアップとツールチップを紐付け
-            var marker = L.marker([lat, lng], { draggable: false })
+            var marker = L.marker([lat, lng], { draggable: false }) // ドラッグを無効化
               .bindPopup(popup)
               .bindTooltip(popupText)
               .addTo(map);
