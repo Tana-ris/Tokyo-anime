@@ -38,9 +38,17 @@
             var lat = parseFloat(parts[0]);
             var lng = parseFloat(parts[1]);
             var popupText = parts[2]; // 3列目のポップアップ文字
+            var column4 = parts[3]; // 4列目の内容
+            var column5 = parts[4]; // 5列目の内容
+            var column6 = parts[5]; // 6列目の内容
 
             // ポップアップオブジェクトを作成
-            var popup = L.popup({ maxWidth: 550 }).setContent(popupText);
+            var popup = L.popup({ maxWidth: 550 }).setContent(`
+              ${popupText}<br>
+              4列目: ${column4}<br>
+              5列目: ${column5}<br>
+              6列目: ${column6}
+            `);
 
             // マーカーにポップアップとツールチップを紐付け
             var marker = L.marker([lat, lng], { draggable: true })
@@ -52,7 +60,13 @@
             var imageNumber = i; // ファイル名に使う連番（1から始まると仮定）
             var imageUrl = `./img/${imageNumber}.jpg`;
             var imageHtml = `<img src="${imageUrl}" width="200" height="150">`;
-            marker.getPopup().setContent(popupText + "<br>" + imageHtml);
+            marker.getPopup().setContent(`
+              ${popupText}<br>
+              4列目: ${column4}<br>
+              5列目: ${column5}<br>
+              6列目: ${column6}<br>
+              ${imageHtml}
+            `);
           }
         })
         .catch(error => console.error('Error:', error));
