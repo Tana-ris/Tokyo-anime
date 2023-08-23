@@ -47,7 +47,7 @@
 
             // 画像を追加
             var imageNumber = i; // ファイル名に使う連番（1から始まると仮定）
-            var imageUrl = `./img/(${imageNumber}).jpg`;
+            var imageUrl = `./img/${imageNumber}.jpg`;
             var imageHtml = `<img src="${imageUrl}" width="200" height="150">`;
             marker.getPopup().setContent(popupText + "<br>" + imageHtml);
           }
