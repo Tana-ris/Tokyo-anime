@@ -45,7 +45,7 @@
             // マーカーにポップアップとツールチップを紐付け
             var marker = L.marker([lat, lng], { draggable: true })
               .bindPopup(popup)
-              .bindTooltip(popupText)
+              .bindTooltip(popupText)  // ここでツールチップに3列目の文字列を表示
               .addTo(map);
 
             // 画像を追加
